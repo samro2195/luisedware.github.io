@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="zh_cn"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="七月十五九月初七的博客"><title>复习使用 MySQL（二） | 七月十五九月初七</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">复习使用 MySQL（二）</h1><a id="logo" href="/.">七月十五九月初七</a><p class="description">生而为人，我很抱歉</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">复习使用 MySQL（二）</h1><div class="post-meta">Sep 4, 2016<span> | </span><span class="category"><a href="/categories/MySQL/">MySQL</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>MySQL 5.7.13</li>
+</ul>
+<h2 id="MySQL-主要存储引擎"><a href="#MySQL-主要存储引擎" class="headerlink" title="MySQL 主要存储引擎"></a>MySQL 主要存储引擎</h2><table>
+<thead>
+<tr>
+<th>特性/引擎</th>
+<th>MyISAM</th>
+<th>Aria</th>
+<th>InnoDB</th>
+<th>XtraDB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据存储</td>
+<td>传统顺序数据储存</td>
+<td>传统顺序数据储存</td>
+<td>表空间存储方式</td>
+<td>表空间存储方式</td>
+<td></td>
+</tr>
+<tr>
+<td>事务支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td></td>
+</tr>
+<tr>
+<td>外键</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+<td></td>
+</tr>
+<tr>
+<td>全文检索</td>
+<td>支持</td>
+<td>支持</td>
+<td>5.6 之后支持</td>
+<td>5.6 之后支持</td>
+<td></td>
+</tr>
+<tr>
+<td>锁级别</td>
+<td>表级锁</td>
+<td>表级锁</td>
+<td>行级锁</td>
+<td>行级锁</td>
+<td></td>
+</tr>
+<tr>
+<td>Count 速度</td>
+<td>快</td>
+<td>快</td>
+<td>慢</td>
+<td>慢</td>
+<td></td>
+</tr>
+<tr>
+<td>适合业务</td>
+<td>读多写少、单表数据量小于 1 KW</td>
+<td>读多写少、单表数据量小于 1 KW</td>
+<td>读写均衡、数据量不限</td>
+<td>读写均衡、数据量不限</td>
+<td></td>
+</tr>
+<tr>
+<td>可用版本</td>
+<td>MySQL、MariaDB、Percona</td>
+<td>MariaDB</td>
+<td>MySQL、MariaDB、Percona</td>
+<td>MariaDB、Percona</td>
+<td></td>
+</tr>
+<tr>
+<td>其他说明</td>
+<td>传统顺序索引数据库，适合读多写少小数据量业务</td>
+<td>MyISAM 增强版，性能更好</td>
+<td>适合高压力高性能的业务模型</td>
+<td>InnoDB 增强版</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="MySQL-索引定义"><a href="#MySQL-索引定义" class="headerlink" title="MySQL 索引定义"></a>MySQL 索引定义</h2><p>MySQL 的索引（Index）是帮助 MySQL 高效获取数据的数据结构</p>
+<h2 id="MySQL-索引类型"><a href="#MySQL-索引类型" class="headerlink" title="MySQL 索引类型"></a>MySQL 索引类型</h2><ul>
+<li>Normal<ul>
+<li>普通索引，对存储的数值没有任何限制</li>
+</ul>
+</li>
+<li>Unique<ul>
+<li>唯一索引，不允许数值重复，但允许空值</li>
+</ul>
+</li>
+<li>Primary<ul>
+<li>主键索引，是一种特殊的唯一索引，不允许存在数值重复或空值</li>
+</ul>
+</li>
+<li>Spatial（R-Tree）<ul>
+<li>GIS 相关空间查询使用索引数据结构。</li>
+</ul>
+</li>
+<li>Fulltext<ul>
+<li>主要用于全文检索，目前只有 MyISAM 和 MySQL 5.6 + 的 InnoDB 支持；目前只支持英文。</li>
+</ul>
+</li>
+</ul>
+<h2 id="MySQL-索引方法"><a href="#MySQL-索引方法" class="headerlink" title="MySQL 索引方法"></a>MySQL 索引方法</h2><ul>
+<li>B+Tree<ul>
+<li>可用于排序的索引数据结构，可应用于 =，&gt;，&lt; 等各个范围查询，并且可以排序</li>
+<li>时间复杂度：O(log2N)</li>
+</ul>
+</li>
+<li>Hash<ul>
+<li>只能用于 =，IN 等操作，无法进行范围操作，Key 冲突严重情况下可能性能比 B-Tree 低下</li>
+<li>时间复杂度：O(1)</li>
+</ul>
+</li>
+</ul>
+<h2 id="MyISAM-索引结构：B-Tree"><a href="#MyISAM-索引结构：B-Tree" class="headerlink" title="MyISAM 索引结构：B+ Tree"></a>MyISAM 索引结构：B+ Tree</h2><ul>
+<li>MyISAM 主索引和辅助索引</li>
+<li>索引操作过程</li>
+<li>MyISAM 为非聚蔟索引：存储key和指针，不存数据的本身</li>
+<li>节点可以存储多个 Key</li>
+<li>层级较浅</li>
+<li>CPU 缓存率较高</li>
+</ul>
+<h2 id="InnoDB-索引结构：B-Tree"><a href="#InnoDB-索引结构：B-Tree" class="headerlink" title="InnoDB 索引结构：B+ Tree"></a>InnoDB 索引结构：B+ Tree</h2><h2 id="存储引擎及版本选择"><a href="#存储引擎及版本选择" class="headerlink" title="存储引擎及版本选择"></a>存储引擎及版本选择</h2><p>结论：</p>
+<ul>
+<li>使用 InnoDB 于生产环境</li>
+<li>使用 MySQL 5.5+ 于生产环境</li>
+</ul>
+<p>原因：</p>
+<ul>
+<li>更稳定可靠的数据存储和索引结构；整个存储引擎设计思想更可靠先进，接近于Oracle、SQL Server级别的数据库（有兴趣可以去阅读源码了解细节）</li>
+<li>更多可靠特性支持，比如事务、外键等支持（支付等关键领域事务非常重要）</li>
+<li>运行更稳定，不论读写数据的量级，都能够保证比较稳定的性能响应</li>
+<li>更好地崩溃恢复机制，特别利用一些Percona的一些工具，更有效运维InnoDB</li>
+<li>MySQL 5.5+ 对比 MySQL 5.1.x 总体功能和性能提升太多，改进太多</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://luisedware.github.io/2016/09/04/复习使用-MySQL（二）/" data-id="ciso0sa4l001h804batpxse6a" class="article-share-link">Share</a><div class="tags"><a href="/tags/MySQL/">MySQL</a></div><div class="post-nav"><a href="/2016/09/02/复习使用-MySQL（一）/" class="next">复习使用 MySQL（一）</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://luisedware.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tooling/">Tooling</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/Laravel-PHP/" style="font-size: 15px;">Laravel PHP</a> <a href="/tags/PHPStorm/" style="font-size: 15px;">PHPStorm</a> <a href="/tags/Sublime-Text-3/" style="font-size: 15px;">Sublime Text 3</a> <a href="/tags/PHP-Laravel-Server/" style="font-size: 15px;">PHP Laravel Server</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/PHP-Laravel-MySQL/" style="font-size: 15px;">PHP Laravel MySQL</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/复习使用-MySQL（二）/">复习使用 MySQL（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/复习使用-MySQL（一）/">复习使用 MySQL（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/01/查看-Eloquent-模型关联时执行的-SQL-语句/">查看 Eloquent 模型关联时执行的 SQL 语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/31/使用阿里云从零开始部署-Laravel/">使用阿里云从零开始部署 Laravel</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/使用-Laravel-编写自定义命令/">使用 Laravel 编写自定义命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/使用-Laravel-基于-SMTP-驱动实现发送邮件/">使用 Laravel 基于 SMTP 驱动实现发送邮件</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/27/使用-PHPStorm-与-Xdebug-调试-Laravel-二/">使用 PHPStorm 与 Xdebug 调试 Laravel (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/20/使用-PHPStorm-与-Xdebug-调试-Laravel-一/">使用 PHPStorm 与 Xdebug 调试 Laravel (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/10/PHP Web Application 运行流程、概念术语、机制原理和代码实践/">PHP Web Application 运行流程、概念术语、机制原理和代码实践</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/04/04/使用Laravel构建内容管理框架（九）/">使用 Laravel 构建内容管理框架（九）</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Blogroll</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">七月十五九月初七.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
