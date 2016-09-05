@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="zh_cn"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="七月十五九月初七的博客"><title>复习使用 MySQL（三） | 七月十五九月初七</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">复习使用 MySQL（三）</h1><a id="logo" href="/.">七月十五九月初七</a><p class="description">生而为人，我很抱歉</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">复习使用 MySQL（三）</h1><div class="post-meta">Sep 4, 2016<span> | </span><span class="category"><a href="/categories/MySQL/">MySQL</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><ul>
+<li>MySQL 5.7.13</li>
+</ul>
+<h2 id="MySQL-优化：硬件"><a href="#MySQL-优化：硬件" class="headerlink" title="MySQL 优化：硬件"></a>MySQL 优化：硬件</h2><ul>
+<li>CPU：使用多核 CPU，能够充分发挥新版 MySQL 多核下的效果，建议 4 核以上</li>
+<li>内存：如果数据量比较大，建议使用不要低于 20 G 内存的服务器</li>
+<li>硬盘：SSD 硬盘，提高 TPS，选择适合的 RAID 方案</li>
+<li>网卡：保证足够的吞吐量，建议千兆网卡</li>
+</ul>
+<h2 id="MySQL-优化：软件"><a href="#MySQL-优化：软件" class="headerlink" title="MySQL 优化：软件"></a>MySQL 优化：软件</h2><ul>
+<li>OS 类型<ul>
+<li>Linux</li>
+<li>FreeBSD</li>
+</ul>
+</li>
+<li>Linux 关键配置<ul>
+<li>文件打开描述符：/etc/security/limits.conf 中 nofile、/proc/sys/fs/nr_open</li>
+<li>可分配文件句柄数：/etc/sysctl.conf 中 fs.file-max、/proc/sys/fs/file-max</li>
+<li>进程数：/etc/security/limits.conf 中的 nproc</li>
+<li>线程数：/proc/sys/kernel/thread-max</li>
+<li>其他 TCP 和网络相关选项：/etc/sysctl.conf</li>
+<li>这些都可以通过ulimit 或 直接调整 /proc 中变量进行临时修改</li>
+<li>建议关闭 SWAP 分区（内存要足够大才行）；如果数据太大，为了防止夯死主机，可以设置 2G 左右的 SWAP 分区</li>
+</ul>
+</li>
+</ul>
+<h2 id="MySQL-优化：基础配置"><a href="#MySQL-优化：基础配置" class="headerlink" title="MySQL 优化：基础配置"></a>MySQL 优化：基础配置</h2><p>基础配置 &amp; MyISAM 配置<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">max_connections=<span class="number">3000</span></div><div class="line">max_user_connections=<span class="number">2800</span></div><div class="line">max_connect_errors=<span class="number">10</span></div><div class="line">max_allowed_packet=<span class="number">64</span>M</div><div class="line">max_heap_table_size=<span class="number">512</span>M</div><div class="line">tmp_table_size=<span class="number">512</span>M</div><div class="line">max_length_for_sort_data=<span class="number">16</span>k</div><div class="line">wait_timeout=<span class="number">172800</span></div><div class="line">interactive_timeout=<span class="number">172800</span></div><div class="line"></div><div class="line">net_buffer_length=<span class="number">8</span>K</div><div class="line">read_buffer_size=<span class="number">4</span>M</div><div class="line">read_rnd_buffer_size=<span class="number">1</span>M</div><div class="line">sort_buffer_size=<span class="number">256</span>K</div><div class="line">join_buffer_size=<span class="number">2</span>M</div><div class="line">table_open_cache=<span class="number">512</span></div><div class="line">thread_cache_size=<span class="number">512</span></div><div class="line">query_cache_type=<span class="number">1</span></div><div class="line">query_cache_size=<span class="number">256</span>M</div></pre></td></tr></table></figure></p>
+<p>InnoDB 配置<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">innodb_file_per_table=<span class="number">1</span></div><div class="line">innodb_open_files=<span class="number">7168</span></div><div class="line">innodb_use_sys_malloc=<span class="number">1</span></div><div class="line">innodb_additional_mem_pool_size=<span class="number">64</span>M</div><div class="line">innodb_buffer_pool_instances=<span class="number">4</span></div><div class="line">innodb_buffer_pool_size=<span class="number">20</span>G</div><div class="line">innodb_data_home_dir=/home/work/data</div><div class="line">innodb_data_file_path=ibdata1:<span class="number">1024</span>M:autoextend</div><div class="line">innodb_autoextend_increment=<span class="number">128</span></div><div class="line">innodb_thread_concurrency=<span class="number">0</span></div><div class="line">innodb_flush_log_at_trx_commit=<span class="number">1</span></div><div class="line">innodb_fast_shutdown=<span class="number">1</span></div><div class="line">innodb_force_recovery=<span class="number">0</span></div><div class="line"></div><div class="line">innodb_log_buffer_size=<span class="number">16</span>M</div><div class="line">innodb_log_file_size=<span class="number">128</span>M</div><div class="line">innodb_log_files_in_group=<span class="number">4</span></div><div class="line">innodb_log_group_home_dir=/home/work/data</div><div class="line">innodb_max_dirty_pages_pct=<span class="number">60</span></div><div class="line">innodb_purge_threads=<span class="number">0</span></div><div class="line">innodb_lock_wait_timeout=<span class="number">50</span></div><div class="line">innodb_rollback_on_timeout=<span class="number">1</span></div><div class="line">innodb_commit_concurrency=<span class="number">0</span></div><div class="line">innodb_concurrency_tickets=<span class="number">1024</span></div><div class="line">innodb_autoinc_lock_mode=<span class="number">2</span></div><div class="line">innodb_change_buffering=all</div></pre></td></tr></table></figure></p>
+<h2 id="MySQL-优化：表设计原则"><a href="#MySQL-优化：表设计原则" class="headerlink" title="MySQL 优化：表设计原则"></a>MySQL 优化：表设计原则</h2><ul>
+<li>互联网业务的特点：数据量大、读写操作多、业务模式相对简单</li>
+<li>单表字段不宜过多，尽量不按照第三范式去设计表结构，</li>
+<li>尽量减少表关联，适当的冗余保证不联表查询</li>
+<li>表名和字段尽量采用小写字母+下划线的命名规则，尽量使用英文，例如：user_score</li>
+<li>每个表一定要有主键，一般建议自增ID；单表索引不宜过多，一般5~6个索引</li>
+<li>字段尽量使用高效类型，比如数字或时间，IP地址、手机号等都可以使用数字类型存储，非不得已采用字符</li>
+</ul>
+<h2 id="MySQL-优化：查询语句"><a href="#MySQL-优化：查询语句" class="headerlink" title="MySQL 优化：查询语句"></a>MySQL 优化：查询语句</h2><ul>
+<li>不要写太复杂的SQL语句，尽量简单，能够让业务去做的，就不要让数据库区操作</li>
+<li>尽量避免：子查询、group by、distinct 等操作（子查询可以用left join替代）</li>
+<li>where、order by 等关键字段一定要建立索引，where里多个条件经常使用的可以建立联合索引（注意建立索引的数据必须是尽量分布多并且具备单调性，重复率低）</li>
+<li>把数据当做神一样来供着，能够缓存的尽量缓存（redis、memcached等），能够多次查询的就不要关联查询</li>
+<li>所有的变更操作（update、delete）必须有where条件！</li>
+<li>不适合使用MySQL服务的数据功能操作，尽量采用别的第三方服务支持，比如全文检索功能</li>
+</ul>
+<h2 id="MySQL-优化：SQL-优化实例"><a href="#MySQL-优化：SQL-优化实例" class="headerlink" title="MySQL 优化：SQL 优化实例"></a>MySQL 优化：SQL 优化实例</h2><ul>
+<li>Like 优化</li>
+<li>Limit 优化</li>
+<li>InnoDB 中 count 优化</li>
+<li>定期使用 Explain 查看执行计划</li>
+</ul>
+<h2 id="PHP-与-MySQL-交互"><a href="#PHP-与-MySQL-交互" class="headerlink" title="PHP 与 MySQL 交互"></a>PHP 与 MySQL 交互</h2><ul>
+<li>扩展层</li>
+<li><p>代码层</p>
+<ul>
+<li>为防止mysql太慢夯住PHP，建议设置SQL超时，或者设置execute_time等超时设置</li>
+<li>$mysqli-&gt;options(MYSQL_OPT_READ_TIMEOUT, 3);</li>
+<li>$mysqli-&gt;options(MYSQL_OPT_WRITE_TIMEOUT, 1);</li>
+<li>务必在代码里记录相关SQL语句执行性能和时间等信息，方便后续优化</li>
+</ul>
+</li>
+<li><p>超时设置</p>
+<ul>
+<li>PHP代码连接后端的超时设置</li>
+<li>php.ini中execute_time设置</li>
+<li>php-fpm中request_terminate_timeout，request_slowlog_timeout</li>
+<li>nginx upstream相关超时设置</li>
+</ul>
+</li>
+</ul>
+<h2 id="PHP-与-MySQL-安全"><a href="#PHP-与-MySQL-安全" class="headerlink" title="PHP 与 MySQL 安全"></a>PHP 与 MySQL 安全</h2><ul>
+<li>SQL 注入</li>
+<li>MySQL 服务端</li>
+<li>备份机制</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://luisedware.github.io/2016/09/04/复习使用-MySQL（三）/" data-id="cispdoc4l0018lp4b88kz36mm" class="article-share-link">Share</a><div class="tags"><a href="/tags/MySQL/">MySQL</a></div><div class="post-nav"><a href="/2016/09/04/复习使用-MySQL（二）/" class="next">复习使用 MySQL（二）</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://luisedware.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tooling/">Tooling</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/PHPStorm/" style="font-size: 15px;">PHPStorm</a> <a href="/tags/Sublime-Text-3/" style="font-size: 15px;">Sublime Text 3</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/PHP-Laravel-Server/" style="font-size: 15px;">PHP Laravel Server</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/PHP-Laravel-MySQL/" style="font-size: 15px;">PHP Laravel MySQL</a> <a href="/tags/Laravel-PHP/" style="font-size: 15px;">Laravel PHP</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/复习使用-MySQL（三）/">复习使用 MySQL（三）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/复习使用-MySQL（二）/">复习使用 MySQL（二）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/复习使用-MySQL（一）/">复习使用 MySQL（一）</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/01/查看-Eloquent-模型关联时执行的-SQL-语句/">查看 Eloquent 模型关联时执行的 SQL 语句</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/31/使用阿里云从零开始部署-Laravel/">使用阿里云从零开始部署 Laravel</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/25/使用-Laravel-编写自定义命令/">使用 Laravel 编写自定义命令</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/使用-Laravel-基于-SMTP-驱动实现发送邮件/">使用 Laravel 基于 SMTP 驱动实现发送邮件</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/27/使用-PHPStorm-与-Xdebug-调试-Laravel-二/">使用 PHPStorm 与 Xdebug 调试 Laravel (二)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/20/使用-PHPStorm-与-Xdebug-调试-Laravel-一/">使用 PHPStorm 与 Xdebug 调试 Laravel (一)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/06/10/PHP Web Application 运行流程、概念术语、机制原理和代码实践/">PHP Web Application 运行流程、概念术语、机制原理和代码实践</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Blogroll</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">七月十五九月初七.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
