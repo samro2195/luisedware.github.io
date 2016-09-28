@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="zh_cn"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="七月十五九月初七的博客"><title>Linux 软件安装 | 七月十五九月初七</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux 软件安装</h1><a id="logo" href="/.">七月十五九月初七</a><p class="description">生而为人，我很抱歉</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Linux 软件安装</h1><div class="post-meta">Sep 27, 2016<span> | </span><span class="category"><a href="/categories/Linux/">Linux</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><h2 id="软件包管理简介"><a href="#软件包管理简介" class="headerlink" title="软件包管理简介"></a>软件包管理简介</h2><ul>
+<li>软件包分类<ul>
+<li>源码包<ul>
+<li>优点：<ul>
+<li>开源，如果有足够的能力，可以修改代码</li>
+<li>可以自由选择所需的功能</li>
+<li>软件是编译安装，所以更加适合自己的系统，更加稳定也效率更高</li>
+<li>卸载方便</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>安装步骤较多，尤其安装较大的软件集合时，容易出现拼写错误</li>
+<li>编译过程时间较长，安装比二进制安装时间长</li>
+<li>编译安装一旦报错，新手很难解决安装错误</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>二进制包（RPM 包、系统默认包）<ul>
+<li>优点：<ul>
+<li>包管理系统简单，只通过几个命令就可以实现包的安装、升级、查询和卸载</li>
+<li>安装速度比源码包安装快得多</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>经过编译，不再可以看到源代码</li>
+<li>功能选择不如源码包灵活</li>
+<li>依赖性</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>脚本安装包（本质是源码包和二进制包）<ul>
+<li>优点：安装简单、快捷</li>
+<li>缺点：完全丧失了自定义性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="RPM-命令管理"><a href="#RPM-命令管理" class="headerlink" title="RPM 命令管理"></a>RPM 命令管理</h2><h3 id="RPM-包命令规则"><a href="#RPM-包命令规则" class="headerlink" title="RPM 包命令规则"></a>RPM 包命令规则</h3><ul>
+<li><code>httpd-2.2.15-15.el6.centos.1.i686.rpm</code><ul>
+<li>httpd：软件包名</li>
+<li>2.2.15：软件版本</li>
+<li>15：软件发布的次数</li>
+<li>el6.centos：适合的 Linux 平台</li>
+<li>i686：适合的硬件平台</li>
+<li>rpm：rpm 包扩展名</li>
+</ul>
+</li>
+</ul>
+<p>RPM 包依赖性</p>
+<ul>
+<li>树形依赖：a-&gt;b-&gt;c</li>
+<li>环形依赖：a-&gt;b-&gt;c-&gt;a</li>
+<li>模块依赖：查询网站：www.rpmfind.net</li>
+</ul>
+<h3 id="RPM-安装命令"><a href="#RPM-安装命令" class="headerlink" title="RPM 安装命令"></a>RPM 安装命令</h3><p>包全名与包名</p>
+<ul>
+<li>包全名：操作的包是没有安装的软件包时，使用包全名。而且要注意路径。</li>
+<li>包名：操作已经安装的软件包时，使用包名，是搜索 /var/lib/rpm/ 中的数据库</li>
+</ul>
+<p>RPM 包安装</p>
+<ul>
+<li>安装<ul>
+<li><code>rpm [选项] 包全名</code><ul>
+<li>选项：<ul>
+<li>-i（install）安装</li>
+<li>-v（verbose）显示详细信息</li>
+<li>-h（hash）显示进度</li>
+<li>--nodeps 不检测依赖性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>升级<ul>
+<li><code>rpm -Uvh  包全名</code><ul>
+<li>选项：<ul>
+<li>-U 升级</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>卸载<ul>
+<li><code>rpm -e 包名</code><ul>
+<li>选项：<ul>
+<li>-e 卸载</li>
+<li>–nodeps 不检查依赖性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>查询<ul>
+<li><code>rpm -qa</code> 查询所有已经安装的 RPM 包</li>
+<li><code>rpm -q 包名</code> 查询包是否安装</li>
+<li><code>rpm -qi 包名</code> 查询软件包详细信息</li>
+<li><code>rpm -ql 包名</code> 查询包中文件安装位置<ul>
+<li>RPM 包默认安装路径<ul>
+<li>/etc 配置文件安装目录</li>
+<li>/usr/bin 可执行命令安装目录</li>
+<li>/usr/lib 程序所使用的函数库保存位置</li>
+<li>/usr/share/doc 基本的软件使用手册保存位置</li>
+<li>/usr/share/man/ 帮助文件保存位置</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>rpm -qf 系统文件名</code><ul>
+<li>选项：<ul>
+<li>-f 查询系统文件属于哪个软件包（file）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>rpm -qR 包名</code><ul>
+<li>选项：<ul>
+<li>-R 查询软件包的依赖性</li>
+<li>-p 查询未安装包信息</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://luisedware.github.io/2016/09/27/Linux-软件安装/" data-id="citmi9kev000eij4b9swpjcxl" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/Linux/">Linux</a></div><div class="post-nav"><a href="/2016/09/26/Linux-定时任务/" class="next">Linux 定时任务</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://luisedware.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tooling/">Tooling</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/PHPStorm/" style="font-size: 15px;">PHPStorm</a> <a href="/tags/Sublime-Text-3/" style="font-size: 15px;">Sublime Text 3</a> <a href="/tags/AliCloud/" style="font-size: 15px;">AliCloud</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/Linux-软件安装/">Linux 软件安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/26/Linux-定时任务/">Linux 定时任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/24/Linux-系统管理/">Linux 系统管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/23/Linux-Crontab-基础/">Linux Crontab 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/23/Linux-服务管理/">Linux 服务管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/22/Linux-Shell-基础之正则表达式/">Linux-Shell-基础之正则表达式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/21/Linux-Shell-基础/">Linux Shell 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/20/Linux-网络基础/">Linux 网络基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/19/Linux-命令基础/">Linux 命令基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/12/MySQL-5-7-版本新特性/">MySQL 5.7 版本新特性</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Blogroll</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">七月十五九月初七.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
