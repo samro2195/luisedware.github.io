@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang="zh_cn"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="七月十五九月初七的博客"><title>Linux 权限管理 | 七月十五九月初七</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/4.2.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux 权限管理</h1><a id="logo" href="/.">七月十五九月初七</a><p class="description">生而为人，我很抱歉</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Linux 权限管理</h1><div class="post-meta">Sep 30, 2016<span> | </span><span class="category"><a href="/categories/Linux/">Linux</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><h2 id="基本权限"><a href="#基本权限" class="headerlink" title="基本权限"></a>基本权限</h2><ul>
+<li><code>drwxrw-r--</code><ul>
+<li>d 文件类型</li>
+<li>r 读</li>
+<li>w 写</li>
+<li>x 执行</li>
+<li>rwx 代表所有者权限</li>
+<li>rw- 代表所属组权限</li>
+<li>r– 代表其他人权限</li>
+</ul>
+</li>
+<li>权限作用<ul>
+<li>权限对文件的作用：<ul>
+<li>r 读取文件内容</li>
+<li>w 编辑、新增、修改文件内容，但是不能删除文件</li>
+<li>x 可执行</li>
+</ul>
+</li>
+<li>权限对目录的作用：<ul>
+<li>r 可以查询目录下文件名（ls）</li>
+<li>w 具有修改目录结构的权限。如新建文件和目录，删除此目录下文件和目录，重命名此目录下文件和目录，剪切（touch rm mv cp）</li>
+<li>x 可以进入目录（cd）</li>
+</ul>
+</li>
+<li>区别：<ul>
+<li>对文件来讲，最高权限是 x</li>
+<li>对目录来讲，最高权限是 w</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限命令<ul>
+<li>chmod</li>
+<li><code>chmod [选项] 模式 文件名</code><ul>
+<li>选项：<ul>
+<li>-R 递归</li>
+</ul>
+</li>
+<li>模式：<ul>
+<li><code>[ugoa] [+.=] [rwx]</code></li>
+<li><code>[mode=421]</code></li>
+</ul>
+</li>
+<li>例子：<ul>
+<li><code>chmod u+x cangls.av</code></li>
+<li><code>chmod a=rwx fengjie.av</code></li>
+<li><code>chmod g+w,o+w furong.av</code></li>
+</ul>
+</li>
+<li>权限的数字表示<ul>
+<li>r 4</li>
+<li>w 2</li>
+<li>x 1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>chgrp<ul>
+<li><code>chgrp 组名 文件名</code> 修改文件的所属组</li>
+</ul>
+</li>
+<li>chown<ul>
+<li><code>chown 用户名 文件名</code> 修改文件的所有者</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="默认权限"><a href="#默认权限" class="headerlink" title="默认权限"></a>默认权限</h2><ul>
+<li>umask 查看默认权限<ul>
+<li>0022<ul>
+<li>第一位 0：文件特殊权限</li>
+<li>022：文件默认权限</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>修改 umask 值<ul>
+<li>临时修改<ul>
+<li>umask 0002</li>
+</ul>
+</li>
+<li>永久修改<ul>
+<li>vim /etc/profile</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>文件的默认权限特点</p>
+<ul>
+<li>文件默认不能建立为执行文件，必须手工赋予执行权限</li>
+<li>文件默认权限最大为 666</li>
+<li>默认权限需要换算成字母再相减</li>
+<li>建立文件之后的默认权限，为 666 减去 umask 值<ul>
+<li>例子：<ul>
+<li>文件默认最大权限 666，umask 值 022</li>
+<li><code>-rw-rw-rw- 减去 -----w--w- 等于 -rw-r--r--</code>，结果为 644</li>
+<li><code>-rw-rw-rw- 键入 -----wx-wx 等于 -rw-r--r--</code>，结果为 644</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>目录的默认权限特点</p>
+<ul>
+<li>目录默认权限最大为 777</li>
+<li>默认权限需要换算成字母再相减</li>
+<li>建立文件之后的默认权限，为 777 减去 umask 值<ul>
+<li>例子：<ul>
+<li>目录默认最大权限为 777，umask 值 022</li>
+<li><code>-rwxrwxrwx 减去 -----w--w- 等于 -rwxr-xr-x</code>，结果为 755</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://luisedware.github.io/2016/09/30/Linux-权限管理/" data-id="cituvo6b9000am74bcb3p9gj1" class="article-share-link">Share</a><div class="tags"><a href="/tags/Linux/">Linux</a></div><div class="post-nav"><a href="/2016/10/03/Linux-Shell-典型应用之主控脚本实现/" class="pre">Linux Shell 典型应用之主控脚本实现</a><a href="/2016/09/27/Linux-软件安装/" class="next">Linux 软件安装</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://luisedware.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/PHP/">PHP</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tooling/">Tooling</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/PHP/" style="font-size: 15px;">PHP</a> <a href="/tags/Laravel/" style="font-size: 15px;">Laravel</a> <a href="/tags/PHPStorm/" style="font-size: 15px;">PHPStorm</a> <a href="/tags/Sublime-Text-3/" style="font-size: 15px;">Sublime Text 3</a> <a href="/tags/AliCloud/" style="font-size: 15px;">AliCloud</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/10/03/Linux-Shell-典型应用之主控脚本实现/">Linux Shell 典型应用之主控脚本实现</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/30/Linux-权限管理/">Linux 权限管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/Linux-软件安装/">Linux 软件安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/26/Linux-定时任务/">Linux 定时任务</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/24/Linux-系统管理/">Linux 系统管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/23/Linux-Crontab-基础/">Linux Crontab 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/23/Linux-服务管理/">Linux 服务管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/22/Linux-Shell-基础之正则表达式/">Linux-Shell-基础之正则表达式</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/21/Linux-Shell-基础/">Linux Shell 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/20/Linux-网络基础/">Linux 网络基础</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Blogroll</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">七月十五九月初七.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
